@@ -1,56 +1,23 @@
-# app.py (Flask application)
-
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import os
-import pickle
-import pandas as pd
+from flask import Flask
+from flask_cors import CORS  
+from models import db
+from routes import register, login
 
 app = Flask(__name__)
-CORS(app, resources={r"/analisis": {"origins": "http://localhost:5173"}}, supports_credentials=True, methods=["POST"])
 
-# Load model preprocessing
-model_path = os.path.join(os.path.dirname(__file__), 'model', 'text_processor.sav')
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 
-class TextProcessor:
-    def __init__(self):
-        # Initialization logic, if any
-        pass
+# Database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:''@localhost/sentivote'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
 
-    def preprocess(self, text):
-        # Placeholder for preprocessing logic
-        # Customize this method based on your model's requirements
-        return text
+# Register Blueprints
+app.register_blueprint(register)
+app.register_blueprint(login)
 
-# Load TextProcessor model
-with open(model_path, 'rb') as f:
-    text_processor_model = pickle.load(f)
-
-print("Model berhasil dimuat. Path:", os.path.abspath(f.name))
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'csv'}
-
-@app.route('/analisis', methods=['POST'])
-def upload_csv():
-    try:
-        file = request.files['file']
-
-        if file and allowed_file(file.filename):
-            # Read CSV into a DataFrame
-            df = pd.read_csv(file)
-
-            # Preprocessing using the TextProcessor
-            text_processor = TextProcessor()
-            df['preprocessed'] = df['Text Tweet'].apply(text_processor.preprocess)
-            df['tokenized'] = df['preprocessed'].apply(lambda x: x.split())
-
-            # Return the processed DataFrame as JSON
-            return jsonify(df.to_dict(orient='records'))
-        else:
-            return jsonify({'error': 'Invalid file or file type'}), 400
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
+# Running app
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # Buat tabel di database sebelum menjalankan aplikasi
     app.run(debug=True)
