@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const {
     register,
     handleSubmit,
@@ -13,31 +13,23 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
-      // Kirim permintaan login ke server
-      const response = await axios.post("http://localhost:5000/login", data);
+      const response = await axios.post("http://localhost:5000/register", data);
 
-      if (response.data.success) {
-        // Jika login berhasil, pindah ke halaman beranda
-        navigate("/");
-        Swal.fire({
-          icon: "success",
-          title: "Login Successful!",
-          text: "Anda berhasil login.",
-        });
-      } else {
-        console.error("Login gagal:", response.data.message);
-        Swal.fire({
-          icon: "error",
-          title: "Login Failed",
-          text: response.data.message || "Terjadi kesalahan saat login.",
-        });
-      }
+      // Handle the response from the Flask API
+      const responseData = response.data;
+      console.log(responseData);
+      Swal.fire({
+        icon: "success",
+        title: "Registration Successful",
+        text: "Anda telah berhasil terdaftar.",
+      });
+      navigate("/login");
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Kesalahan saat registrasi:", error);
       Swal.fire({
         icon: "error",
-        title: "Login Failed",
-        text: "Terjadi kesalahan saat login. Silakan coba lagi.",
+        title: "Registration Error",
+        text: "Terjadi kesalahan saat pendaftaran. Silakan coba lagi.",
       });
     }
   };
@@ -46,7 +38,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="w-full max-w-sm p-8 bg-white rounded-md shadow-md">
         <h1 className="text-3xl font-bold mb-6 text-center text-[#4B00A2]">
-          Login
+          Register
         </h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col my-4">
@@ -58,6 +50,20 @@ export default function LoginPage() {
               {...register("username", { required: true })}
             />
             {errors.username && (
+              <span className="mt-2 text-xs text-red-500">
+                Mohon isi di kolom berikut*
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col my-4">
+            <input
+              type="email"
+              className="w-full px-3 py-2 border border-gray-300 rounded"
+              placeholder="Email"
+              autoComplete="current-email"
+              {...register("email", { required: true })}
+            />
+            {errors.email && (
               <span className="mt-2 text-xs text-red-500">
                 Mohon isi di kolom berikut*
               </span>
@@ -77,20 +83,19 @@ export default function LoginPage() {
               </span>
             )}
           </div>
-
           <div className="flex items-center justify-center mt-10">
             <button
               type="submit"
               className="bg-[#680DD0] w-full font-bold  text-white p-3 rounded mb-4"
             >
-              Masuk
+              Daftar
             </button>
           </div>
         </form>
         <p className=" text-zinc-500">
-          Belum punya akun ?
-          <a href="/register" className="ms-2 text-[#680DD0]">
-            Daftar
+          Sudah punya akun ?
+          <a href="/login" className="ms-2 text-[#680DD0]">
+            Masuk
           </a>
         </p>
       </div>
