@@ -13,7 +13,7 @@ class TextProcessor:
         stopwords_sastrawi = factory.get_stop_words()
         stopwords_nltk = set(stopwords.words("indonesian"))
 
-        txt_stopword = pd.read_csv('backend/database/stopword/stopword.csv', header=None, names=["stopwords"])
+        txt_stopword = pd.read_csv('./database/stopword/stopword.csv', header=None, names=["stopwords"])
         additional_stopwords = list(txt_stopword["stopwords"])
 
         self.stop_words = stopwords_sastrawi + list(stopwords_nltk) + additional_stopwords + ["petrus", "sech", "bulakparen", "dcs", "mug","ahhhh","ah"
@@ -26,7 +26,7 @@ class TextProcessor:
                 "pisss", "yo", "kok", "nge", "wkwkkw", "dah", "wahhh", "apa"]
 
         # Inisialisasi kamus normalisasi
-        normalized_word = pd.read_csv('backend/database/normalisasi/normalisasi.csv', encoding='latin1')
+        normalized_word = pd.read_csv('./database/normalisasi/normalisasi.csv', encoding='latin1')
         self.normalized_word_dict = {}
         for index, row in normalized_word.iterrows():  # Iterate over rows
             word = row.iloc[0]  # Access using iloc for position-based indexing
