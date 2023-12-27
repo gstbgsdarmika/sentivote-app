@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS  
+from flask_jwt_extended import JWTManager
 from models import db
 from routes import register, login
 from module.Preprocessing import TextProcessor
@@ -14,7 +15,12 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}, supports_cred
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:''@localhost/sentivote'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'sentivote-app'
+app.config['JWT_SECRET_KEY'] = 'sentivote-app'
 db.init_app(app)
+
+jwt = JWTManager()
+jwt.init_app(app)
 
 # Register Blueprints
 app.register_blueprint(register)
@@ -81,5 +87,5 @@ def upload_csv():
 # Running app
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Buat tabel di database sebelum menjalankan aplikasi
+        db.create_all()  
     app.run(debug=True)
