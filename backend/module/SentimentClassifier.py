@@ -10,6 +10,9 @@ class SentimentClassifier:
         self.k_value = int(k_percentage * self.X_tfidf.shape[1])
         self.chi2_selector = SelectKBest(chi2, k=self.k_value)
         self.X_new = self.chi2_selector.fit_transform(self.X_tfidf, self.df_calon['Sentiment'])
+    
+    def get_df_calon(self):
+        return self.df_calon
 
     def get_tfidf_vectorizer(self):
         return self.tfidf_vectorizer
