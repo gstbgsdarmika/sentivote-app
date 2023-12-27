@@ -13,11 +13,12 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
-      // Kirim permintaan login ke server
       const response = await axios.post("http://localhost:5000/login", data);
 
       if (response.data.success) {
-        // Jika login berhasil, pindah ke halaman beranda
+        const accessToken = response.data.access_token;
+        localStorage.setItem("token", accessToken);
+
         navigate("/");
         Swal.fire({
           icon: "success",

@@ -13,11 +13,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://localhost:5000/register", data);
-
-      // Handle the response from the Flask API
-      const responseData = response.data;
-      console.log(responseData);
+      await axios.post("http://localhost:5000/register", data);
       Swal.fire({
         icon: "success",
         title: "Registration Successful",
