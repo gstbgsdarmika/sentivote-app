@@ -60,6 +60,8 @@ class TextClassifier:
         y_pred = best_rf_model.predict(X_test)
         accuracy = accuracy_score(y_test, y_pred)
 
+        return best_rf_model
+
         # # Display results
         # print("\nJumlah fitur:", x.shape[1])
         # print("Best Hyperparameters:", best_params)

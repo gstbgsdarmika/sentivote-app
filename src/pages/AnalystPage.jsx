@@ -26,14 +26,6 @@ const DataDisplay = ({ csvData }) => {
         <h1 className="text-[#1E1E1E] text-4xl font-semibold">
           Tampilan Data CSV
         </h1>
-        <Link to="/hasil-analisis">
-          <button
-            type="button"
-            className="px-12 py-3 rounded-lg bg-[#32c563] text-white font-bold"
-          >
-            Analisis
-          </button>
-        </Link>
       </div>
       <div className="overflow-auto">
         {csvData.length > 0 && (
