@@ -21,7 +21,22 @@ user_schema = UserSchema()
 preprocessor = Preprocessing() 
 text_classifier = Classifier()
 
-# Menggunakan model RF
+# Menggunakan model RF Aspek 
+rf_aspect_model = joblib.load('./module/machine/rf_aspect_model.joblib')
+tfidf_vectorizer = joblib.load('./module/machine/tfidf_vectorizer.joblib')
+chi2_selector = joblib.load('./module/machine/chi2_selector.joblib')
+
+# Menggunakan model RF Agus
+rf_agus_model = joblib.load('./module/machine/rf_agus_model.joblib')
+tfidf_vectorizer_agus = joblib.load('./module/machine/tfidf_vectorizer_agus.joblib')
+chi2_selector_agus = joblib.load('./module/machine/chi2_selector_agus.joblib')
+
+# Menggunakan model RF Ahok
+rf_ahok_model = joblib.load('./module/machine/rf_ahok_model.joblib')
+tfidf_vectorizer_ahok = joblib.load('./module/machine/tfidf_vectorizer_ahok.joblib')
+chi2_selector_ahok = joblib.load('./module/machine/chi2_selector_ahok.joblib')
+
+# Menggunakan model RF Anies
 rf_anies_model = joblib.load('./module/machine/rf_anies_model.joblib')
 tfidf_vectorizer_anies = joblib.load('./module/machine/tfidf_vectorizer_anies.joblib')
 chi2_selector_anies = joblib.load('./module/machine/chi2_selector_anies.joblib')
@@ -70,18 +85,45 @@ def preprocess_text():
             preprocessed_text = preprocessor.preprocess_all(text_to_preprocess)
 
             # Use the same TF-IDF vectorizer
-            X_new_tfidf = tfidf_vectorizer_anies.transform([preprocessed_text])
+            X_new_tfidf_ahok = tfidf_vectorizer_ahok.transform([preprocessed_text])
+            X_new_tfidf_agus = tfidf_vectorizer_agus.transform([preprocessed_text])
+            X_new_tfidf_anies = tfidf_vectorizer_anies.transform([preprocessed_text])
 
             # Use the same chi-square selector
-            X_new_chi2 = chi2_selector_anies.transform(X_new_tfidf)
+            X_new_chi2_ahok = chi2_selector_ahok.transform(X_new_tfidf_ahok)
+            X_new_chi2_agus = chi2_selector_agus.transform(X_new_tfidf_agus)
+            X_new_chi2_anies = chi2_selector_anies.transform(X_new_tfidf_anies)
 
-            # Lakukan prediksi menggunakan model RF yang telah dimuat 
-            prediction = rf_anies_model.predict(X_new_chi2)[0]
+            # Predict probabilities using the three models
+            prob_ahok = rf_ahok_model.predict_proba(X_new_chi2_ahok)[0]
+            prob_agus = rf_agus_model.predict_proba(X_new_chi2_agus)[0]
+            prob_anies = rf_anies_model.predict_proba(X_new_chi2_anies)[0]
+
+            # Choose the model with the highest probability
+            chosen_model = max([(prob_ahok[1], 'ahok'), (prob_agus[1], 'agus'), (prob_anies[1], 'anies')], key=lambda x: x[0])
+
+            # Get the chosen model
+            if chosen_model[1] == 'ahok':
+                prediction_sentiment = rf_ahok_model.predict(X_new_chi2_ahok)[0]
+            elif chosen_model[1] == 'agus':
+                prediction_sentiment = rf_agus_model.predict(X_new_chi2_agus)[0]
+            elif chosen_model[1] == 'anies':
+                prediction_sentiment = rf_anies_model.predict(X_new_chi2_anies)[0]
+
+            # TF-IDF vectorizer and chi-square selector for aspect analysis
+            X_new_tfidf_aspect = tfidf_vectorizer.transform([preprocessed_text])
+            X_new_chi2_aspect = chi2_selector.transform(X_new_tfidf_aspect)
+
+            # Predict aspect using rf_aspect_model
+            prediction_aspect = rf_aspect_model.predict(X_new_chi2_aspect)[0]
             
             # Menambahkan hasil prediksi ke dalam respons
             response_data = {
                 "result": preprocessed_text,
-                "prediction": prediction
+                "chosen_model": chosen_model[1],
+                "prediction_sentiment": prediction_sentiment,
+                "prediction_confidence": chosen_model[0],
+                "prediction_aspect": prediction_aspect
             }
 
             return jsonify(response_data)
@@ -89,6 +131,7 @@ def preprocess_text():
             return jsonify({"error": "Missing 'text' parameter"}), 400
     else:
         return jsonify({"error": "Unsupported method"}), 405
+
 
     
 @predictFile.route('/analisis', methods=['POST'])

@@ -11,10 +11,16 @@ export default function ResultsPage() {
         </h1>
         <div className="w-[524.82px] mt-5">
           <p className="text-base font-medium text-stone-900">
-            Ulasan:
-            <span className="text-base font-normal text-zinc-600">
+            Teks:
+            <span className="text-base font-normal text-zinc-600 ps-2">
               Ahok-Djarot kalah dalam pilkada, tapi menang dalam menjaga
               integritas berdemokrasi Pancasila. Bangga!
+            </span>
+          </p>
+          <p className="text-base font-medium text-stone-900">
+            Aspek:
+            <span className="text-base font-normal text-zinc-600 ps-2">
+              Ahok-Djarot:
             </span>
           </p>
           <h1 className="mt-10 md:p-2.5 p-1.5 bg-violet-700 rounded-lg  text-white md:text-4xl text-2xl font-extrabold inline-block">
