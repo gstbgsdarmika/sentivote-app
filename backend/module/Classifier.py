@@ -4,15 +4,13 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import accuracy_score, classification_report
 
-class TextClassifier:
+class Classifier:
     def __init__(self):
         self.tfidf_vectorizer = TfidfVectorizer()
         self.chi2_selector = None
         self.rf_classifier = None
 
     def preprocess_text(self, text_data):
-        # You can add your text preprocessing logic here
-        # For now, assuming 'text_data' is already preprocessed
         return text_data
 
     def train_tfidf(self, text_data):
@@ -61,10 +59,3 @@ class TextClassifier:
         accuracy = accuracy_score(y_test, y_pred)
 
         return best_rf_model
-
-        # # Display results
-        # print("\nJumlah fitur:", x.shape[1])
-        # print("Best Hyperparameters:", best_params)
-        # print("Test Accuracy:", accuracy)
-        # print("\nClassification Report:\n", classification_report(y_test, y_pred))
-        # return best_rf_model

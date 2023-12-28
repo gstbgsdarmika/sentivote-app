@@ -14,3 +14,14 @@ class User(db.Model):
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
+
+class AnalysisResult(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.String(255), nullable=False)
+    aspek = db.Column(db.String(50), nullable=False)
+    sentiment = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, data, aspek, sentiment):
+        self.data = data
+        self.aspek = aspek
+        self.sentiment = sentiment

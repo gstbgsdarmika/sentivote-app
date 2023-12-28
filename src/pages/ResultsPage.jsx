@@ -5,14 +5,14 @@ export default function ResultsPage() {
   return (
     <div className="mt-12">
       <Navigation />
-      <div className="flex flex-col justify-center items-center h-screen text-center">
-        <h1 className="text-stone-900 text-4xl font-semibold">
+      <div className="flex flex-col items-center justify-center h-screen text-center">
+        <h1 className="text-4xl font-semibold text-stone-900">
           Hasil Analisis Sentimen
         </h1>
         <div className="w-[524.82px] mt-5">
-          <p className="text-stone-900 text-base font-medium">
+          <p className="text-base font-medium text-stone-900">
             Ulasan:
-            <span className="text-zinc-600 text-base font-normal">
+            <span className="text-base font-normal text-zinc-600">
               Ahok-Djarot kalah dalam pilkada, tapi menang dalam menjaga
               integritas berdemokrasi Pancasila. Bangga!
             </span>
@@ -25,7 +25,7 @@ export default function ResultsPage() {
           <Link to="/analisis">
             <button
               type="button"
-              className="px-8 py-3 rounded-lg border border-violet-700 font-bold text-violet-700 hover:bg-violet-700 hover:text-white"
+              className="px-8 py-3 font-bold border rounded-lg border-violet-700 text-violet-700 hover:bg-violet-700 hover:text-white"
             >
               Coba Lagi
             </button>
