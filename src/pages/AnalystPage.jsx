@@ -22,18 +22,10 @@ const DataDisplay = ({ csvData }) => {
 
   return (
     <div className="items-center justify-center w-11/12 mx-auto mt-32 mb-10 md:container md:w-5/6">
-      <div className="flex items-center justify-between mb-10">
+      <div className="flex items-center justify-between mb-6">
         <h1 className="text-[#1E1E1E] text-4xl font-semibold">
-          Tampilan Data CSV
+          Hasil Analisis Sentimen
         </h1>
-        <Link to="/hasil-analisis">
-          <button
-            type="button"
-            className="px-12 py-3 rounded-lg bg-[#32c563] text-white font-bold"
-          >
-            Analisis
-          </button>
-        </Link>
       </div>
       <div className="overflow-auto">
         {csvData.length > 0 && (
