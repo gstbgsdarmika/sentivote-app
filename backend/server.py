@@ -2,16 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS  
 from flask_jwt_extended import JWTManager
 from models import db
-<<<<<<< HEAD
 from routes import register, login, predict, predictFile
 import joblib
-=======
-from routes import register, login
-from module.Preprocessing import TextProcessor
-from module.AnalysisService import TextClassifier
-from module.SentimentClassifier import SentimentClassifier
-import pandas as pd
->>>>>>> c5af4cf3224d8df126d71fee1d0fd8ad9f0e04f2
 
 app = Flask(__name__)
 
